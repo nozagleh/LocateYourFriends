@@ -3,10 +3,15 @@ package com.nozagleh.locateyourfriends;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 
 /**
@@ -18,6 +23,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class CreateGroupFragment extends Fragment {
+    private static final String TAG = "CreateGroupFragment";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -26,6 +33,11 @@ public class CreateGroupFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private View view;
+    private TextInputLayout textInputLayout;
+    private TextInputEditText txtGroupName;
+    private Button createButton;
 
     private FragmentListener mListener;
 
@@ -63,8 +75,43 @@ public class CreateGroupFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        view = inflater.inflate(R.layout.fragment_create_group, container, false);
+
+        textInputLayout = view.findViewById(R.id.textInputLayout);
+        txtGroupName = view.findViewById(R.id.txtGroupName);
+
+        createButton = view.findViewById(R.id.btnCreateGroup);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(txtGroupName.getText().length() < 1) {
+                    textInputLayout.setErrorEnabled(true);
+                    textInputLayout.setError(getString(R.string.add_group_hint_error));
+
+                    return;
+                }
+
+                String uid = LocalDataManager.getUserId(getContext());
+                APIConnector.addGroup(uid, txtGroupName.getText().toString());
+
+                // Update local group list
+                APIConnector.getGroups(view.getContext(), LocalDataManager.getUserId(view.getContext()));
+
+                getActivity().getSupportFragmentManager().popBackStackImmediate();
+            }
+        });
+
+        txtGroupName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                textInputLayout.setErrorEnabled(false);
+                textInputLayout.setError(null);
+            }
+        });
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_create_group, container, false);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -90,4 +137,6 @@ public class CreateGroupFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
 }

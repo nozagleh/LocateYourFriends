@@ -11,6 +11,12 @@
     <string name="nav_list_add_group">Add Group</string>
     <string name="nav_list_create_group">Create Group</string>
 
+    <!--Create Group -->
+    <string name="add_group_label">Create a new group</string>
+    <string name="add_group_pretty_name">Group name</string>
+    <string name="add_group_hint_error">Hmmm&#8230; that doesn\'t seem to be a valid name</string>
+    <string name="add_group_create_button">Create Group</string>
+
     <string name="notification_no_internet">No internet connection!</string>
     <string name="notification_no_gps">No GPS signal</string>
 

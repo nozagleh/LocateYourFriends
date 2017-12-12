@@ -62,8 +62,9 @@ public class AddGroupFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        boolean resp = DataManager.isDomainUp(getContext());
-        Log.d(TAG, String.valueOf(resp));
+        DataManager.isDomainUp(getContext());
+
+        Log.d(TAG, String.valueOf(DataManager.getIsServerUp()));
     }
 
     @Override

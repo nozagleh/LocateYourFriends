@@ -1,7 +1,9 @@
 package com.nozagleh.locateyourfriends;
 
 import android.Manifest;
+import android.location.Location;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity
     private static final String FRAG_TAG_CREATE_GROUP = "FRAG_GROUP_CREATE";
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(Group item) {
 
     }
 
@@ -68,27 +70,40 @@ public class MainActivity extends AppCompatActivity
         // Sets the map view to default
         navigationView.getMenu().getItem(0).setChecked(true);
 
-        if(!LocalDataManager.hasUserId(this)) {
-            Log.w(TAG, "no uid registered");
-        }
-
         FragmentManager fm = getSupportFragmentManager();
         fragment = new MapFragment();
 
         startFragment(fragment, FRAG_TAG_MAP);
 
+        NotificationManager.setView(this.findViewById(android.R.id.content));
+
         if (!PermissionManager.checkPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
             PermissionManager.askPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-            NotificationManager.notifyNoGPS(
+            /*NotificationManager.notifyNoGPS(
                     this.findViewById(android.R.id.content),
-                    getString(R.string.notification_no_gps));
+                    getString(R.string.notification_no_gps));*/
         }
 
         if (!NetworkManager.hasInternetConnection(this)) {
             NotificationManager.notifyNoInternet(
                     this.findViewById(android.R.id.content),
                     getString(R.string.notification_no_internet));
+        } else {
+            DataManager.checkDomain(this);
         }
+
+        if(!LocalDataManager.hasUserId(this) && DataManager.registerNewUser(this)) {
+            Log.d(TAG, LocalDataManager.getUserId(this));
+        }
+
+        if(PermissionManager.checkPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            Location location = GPSManager.getLocation(this);
+            Log.d(TAG, String.valueOf(location.getLatitude()));
+            GPSManager.stopLocationTracking();
+        }
+
+        Log.d(TAG, "Getting groups");
+        APIConnector.getGroups(getApplicationContext(), LocalDataManager.getUserId(this));
     }
 
     @Override

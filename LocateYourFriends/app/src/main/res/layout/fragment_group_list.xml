@@ -1,13 +1,12 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.nozagleh.locateyourfriends.GroupListFragment">
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/list"
+android:name="com.nozagleh.locateyourfriends.GroupListFragment"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+app:layoutManager="LinearLayoutManager"
+tools:context="com.nozagleh.locateyourfriends.GroupListFragment"
+tools:listitem="@layout/fragment_person" />
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
-</FrameLayout>

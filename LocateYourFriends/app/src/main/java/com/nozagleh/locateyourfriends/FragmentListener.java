@@ -7,5 +7,5 @@ import com.nozagleh.locateyourfriends.dummy.DummyContent;
  */
 
 public interface FragmentListener {
-    void onListFragmentInteraction(DummyContent.DummyItem item);
+    void onListFragmentInteraction(Group item);
 }

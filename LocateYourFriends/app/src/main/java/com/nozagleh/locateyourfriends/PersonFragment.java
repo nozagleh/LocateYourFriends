@@ -70,7 +70,7 @@ public class PersonFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyPersonRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            //recyclerView.setAdapter(new MyPersonRecyclerViewAdapter(Group.ITEMS, mListener));
         }
         return view;
     }

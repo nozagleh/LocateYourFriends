@@ -1,26 +1,25 @@
 package com.nozagleh.locateyourfriends;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.nozagleh.locateyourfriends.dummy.DummyContent.DummyItem;
-
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link Group} and makes a call to the
- * specified {@link FragmentListener}.
- * TODO: Replace the implementation with code for your data type.
+ * Created by arnarfreyr on 10.12.2017.
  */
-public class MyPersonRecyclerViewAdapter extends RecyclerView.Adapter<MyPersonRecyclerViewAdapter.ViewHolder> {
+
+public class GroupListAdapter extends RecyclerView.Adapter<GroupListAdapter.ViewHolder> {
+    private final static String TAG = "GroupListAdapter";
 
     private final List<Group> mValues;
     private final FragmentListener mListener;
 
-    public MyPersonRecyclerViewAdapter(List<Group> items, FragmentListener listener) {
+    public GroupListAdapter(List<Group> items, FragmentListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -29,7 +28,7 @@ public class MyPersonRecyclerViewAdapter extends RecyclerView.Adapter<MyPersonRe
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_person, parent, false);
-        return new ViewHolder(view);
+        return new GroupListAdapter.ViewHolder(view);
     }
 
     @Override
@@ -45,6 +44,7 @@ public class MyPersonRecyclerViewAdapter extends RecyclerView.Adapter<MyPersonRe
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
                     mListener.onListFragmentInteraction(holder.mItem);
+                    Log.d(TAG, "clicked");
                 }
             }
         });
@@ -61,11 +61,11 @@ public class MyPersonRecyclerViewAdapter extends RecyclerView.Adapter<MyPersonRe
         public final TextView mContentView;
         public Group mItem;
 
-        public ViewHolder(View view) {
-            super(view);
-            mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+        public ViewHolder(View itemView) {
+            super(itemView);
+            mView = itemView;
+            mIdView = (TextView) itemView.findViewById(R.id.id);
+            mContentView = (TextView) itemView.findViewById(R.id.content);
         }
 
         @Override

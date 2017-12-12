@@ -3,6 +3,7 @@ package com.nozagleh.locateyourfriends;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -46,25 +47,47 @@ public class NetworkManager {
         return true;
     }
 
-    public static boolean pingDomain(String url, Context context, final NetworkCallbacks callbacks) {
+    public static boolean pingDomain(String url, Context context) {
         if (hasInternetConnection(context)) {
             try {
                 StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        boolean isUp = false;
                         if ( response.length() > 0 ) {
-                            isUp = true;
+                            Log.d(TAG, "up");
+                            DataManager.setIsServerUp(true);
+                        } else {
+                            Log.d(TAG, "down");
+                            DataManager.setIsServerUp(false);
                         }
-                        callbacks.pingResponse(isUp);
                     }
                 },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            Log.d(TAG, error.toString());
                         }
                 });
+
+                NetworkManager.getQueue().add(stringRequest);
+
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+            }
+        }
+        return false;
+    }
+
+    public static boolean pingDomain(String url, Context context, Response.Listener listener) {
+        if (hasInternetConnection(context)) {
+            try {
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url, listener,
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.d(TAG, error.toString());
+                            }
+                        });
 
                 NetworkManager.getQueue().add(stringRequest);
 

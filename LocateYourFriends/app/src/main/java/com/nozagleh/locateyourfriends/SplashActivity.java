@@ -1,8 +1,10 @@
 package com.nozagleh.locateyourfriends;
 
+import android.Manifest;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -11,7 +13,13 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         NetworkManager.initQueue(this);
-        DataManager.setIsServerUp(DataManager.isDomainUp(this));
+
+        if(PermissionManager.checkPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            GPSManager.initLocationManager(this);
+            GPSManager.startLocationTracking(this);
+
+            BackgroundManager.scheduleJob(this);
+        }
 
         // Start the main activity
         startActivity(new Intent(SplashActivity.this,MainActivity.class));
